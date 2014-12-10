@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Created by johannes on 24.11.2014.
  * Graphical adapations - 04.12.2014
+ * Karsten Becker: added parameter in instancing of object Item (line 36) - 10.12.2014
  */
 public class Room {
 
@@ -19,7 +20,7 @@ public class Room {
 
     private List<Item> itemList;
 
-    public Room (Bitmap bitmapRoomR, int ID, Context ctx) {
+    public Room (Bitmap bitmapRoomR, int ID, Context ctx) { //später noch x und y koordinaten
         bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
                 GlobalInformation.getScreenWidth(),
                 GlobalInformation.getScreenHeight(),
@@ -32,7 +33,7 @@ public class Room {
 
         //TODO populate this object list from XML information instead
         if (ID == 2) {
-            itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 180, 40));
+            //itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze),1, 180, 40));
         }
     }
 
