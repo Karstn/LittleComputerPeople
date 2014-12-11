@@ -1,32 +1,36 @@
 package com.example.Demo_Subj;
 
-import android.graphics.Bitmap;
+
 
 import java.util.List;
 
 /**
  * Created by johannes on 24.11.2014.
- * modified by Karsten Becker 10.12.2014
+ * modified by Karsten Becker 11.12.2014
  */
-
+//TODO: bei use evtl. subject ausblenden lassen
 public class Item {
-
-    private int active_state = 0; //state: 0= inactive ; 1=active by subject ; 2=active by user
+    //active or inactive
+    private enum actstate {inactive,user,subject};
+    private actstate active_state = actstate.inactive;
 
     private int id; //Item-ID
     private float xPos;
     private float yPos;
-    private String itemStandBitmapName; //name of resource to draw
+    private int default_graphics_id; //default
+    private int akt_graphics_id; //name of resource to draw
     private static int holdAnimationCycles = 20; //time between animation steps
 
-    private List<String> itemAnim;
-    private List<String> itemAnimInv;
+    //Lists contain graphics-ids for the animations
+    private List<Integer> itemAnimbySubject;
+    private List<Integer> itemAnimbyUser;
 
 
 
     //constructor
-    public Item(String itemStandBitmapName, int id, float x, float y){ //added id, abfangen, name der resource statt bitmap
-        this.itemStandBitmapName = itemStandBitmapName;
+    public Item(String graphicsname, int id, float x, float y){
+
+        this.default_graphics_id = resNameToResID(graphicsname);
         this.id = id;
         //negative Werte für x und y abfangen
         if(x >= 0.0f) {
@@ -44,7 +48,10 @@ public class Item {
         yPos = y;
 
      }
-
+    //get resource-id from resource-name
+    private int resNameToResID(String resourcename){
+        return GlobalInformation.context.getResources().getIdentifier(resourcename , "drawable", GlobalInformation.context.getPackageName());
+    }
     //x-coordinate
     public float getxPos(){
         return this.xPos;
@@ -54,32 +61,42 @@ public class Item {
         return this.yPos;
     }
     //returns name of resource to draw (instead of Bitmap)
-    public String getBitmap(){
-        return this.itemStandBitmapName;
+    public int getAktGraphics(){
+        return this.akt_graphics_id;
     }
     //returns item-id
     public int getID(){
         return this.id;
     }
-
     //item used by Subject
     public void useBySubject(){
-        this.active_state = 1;
-
+        this.active_state = actstate.subject;
     }
     //item used by User
     public void useByUser(){
-        this.active_state = 2;
-
+        this.active_state = actstate.user;
     }
     //tick
     public void tick(){
-
-        //TODO: active_state überprüfen
+        //sets the graphic-id for the renderer
+        if (this.active_state == actstate.subject){
+            //TODO: animation caused by subjekt
+        }
+        else if (this.active_state == actstate.user){
+            //TODO: animation caused by user
+        }
+        //if item is inactive
+        else{
+            this.akt_graphics_id = this.default_graphics_id;
+        }
     }
-    //adds drawable pictures for animation in a list
-    public void addResource(String resourcename){
-        itemAnim.add(resourcename);
+    //adds drawable picture-ids for subject caused animation  in a list
+    public void addGraphicsforSubjectUse(String graphicsname){
+        itemAnimbySubject.add(resNameToResID(graphicsname));
+    }
+    //adds drawable picture-id for user caused  animation in a list
+    public void addGraphicsforUserUse(String graphicsname){
+        itemAnimbyUser.add(resNameToResID(graphicsname));
     }
 
 }
